@@ -16,30 +16,21 @@ const FooterContent = () => {
           ❤️
         </Box>
         {` by `}
-        <Link target='_blank' href='https://themeselection.com/'>
-          ThemeSelection
+        <Link target='_blank' href='https://www.facebook.com/nth230201'>
+          Trung Hiếu
         </Link>
       </Typography>
       {hidden ? null : (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
           <Link
             target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/LICENSE'
-          >
-            MIT License
-          </Link>
-          <Link target='_blank' href='https://themeselection.com/'>
-            More Themes
-          </Link>
-          <Link
-            target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/blob/main/README.md'
+            href='https://github.com/hieu230201/reactjs-world-phone'
           >
             Documentation
           </Link>
           <Link
             target='_blank'
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free/issues'
+            href='https://www.facebook.com/nth230201'
           >
             Support
           </Link>

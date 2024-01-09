@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import {forwardRef, useState} from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -20,6 +20,8 @@ import Button from '@mui/material/Button'
 
 // ** Icons Imports
 import Close from 'mdi-material-ui/Close'
+import DatePicker from "react-datepicker";
+import DatePickerWrapper from "../../@core/styles/libs/react-datepicker";
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -45,9 +47,13 @@ const ResetButtonStyled = styled(Button)(({ theme }) => ({
   }
 }))
 
+const CustomInput = forwardRef((props, ref) => {
+  return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
+})
+
 const TabAccount = () => {
   // ** State
-  const [openAlert, setOpenAlert] = useState(true)
+  const [openAlert, setOpenAlert] = useState(false)
   const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
 
   const onChange = file => {
@@ -58,6 +64,12 @@ const TabAccount = () => {
       reader.readAsDataURL(files[0])
     }
   }
+
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
 
   return (
     <CardContent>
@@ -125,7 +137,15 @@ const TabAccount = () => {
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField fullWidth label='Company' placeholder='ABC Pvt. Ltd.' defaultValue='ABC Pvt. Ltd.' />
+            <DatePickerWrapper>
+              <DatePicker
+                  showYearDropdown
+                  showMonthDropdown
+                  id='account-settings-date'
+                  customInput={<CustomInput />}
+                  placeholderText='MM-DD-YYYY'
+              />
+            </DatePickerWrapper>
           </Grid>
 
           {openAlert ? (
