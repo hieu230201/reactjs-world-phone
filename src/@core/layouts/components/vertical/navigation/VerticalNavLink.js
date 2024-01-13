@@ -54,7 +54,7 @@ const VerticalNavLink = ({item, navVisible, toggleNavVisibility}) => {
     const [pathText, setPathText] = useState('/');
     const router = useRouter()
     const isNavLinkActive = (text) => {
-        debugger
+        
         if (router.pathname === text || handleURLQueries(router, text)) {
             return true
         } else {
@@ -63,7 +63,7 @@ const VerticalNavLink = ({item, navVisible, toggleNavVisibility}) => {
     }
 
     const toggleChildMenu = (e) => {
-        debugger
+        
         e.preventDefault();
         if (item.childers) {
             setIsOpen(!isOpen);

@@ -89,31 +89,31 @@ const navigation = () => {
             icon: CashRemove,
             path: '/orders-invoice'
         },
-        // {
-        //     title: 'Typography',
-        //     icon: FormatLetterCase,
-        //     path: '/typography'
-        // },
-        // {
-        //     title: 'Icons',
-        //     path: '/icons',
-        //     icon: GoogleCirclesExtended
-        // },
-        // {
-        //     title: 'Cards',
-        //     icon: CreditCardOutline,
-        //     path: '/cards'
-        // },
-        // {
-        //     title: 'Tables',
-        //     icon: Table,
-        //     path: '/tables'
-        // },
-        // {
-        //     icon: CubeOutline,
-        //     title: 'Form Layouts',
-        //     path: '/form-layouts'
-        // }
+        {
+            title: 'Typography',
+            icon: FormatLetterCase,
+            path: '/typography'
+        },
+        {
+            title: 'Icons',
+            path: '/icons',
+            icon: GoogleCirclesExtended
+        },
+        {
+            title: 'Cards',
+            icon: CreditCardOutline,
+            path: '/cards'
+        },
+        {
+            title: 'Tables',
+            icon: Table,
+            path: '/tables'
+        },
+        {
+            icon: CubeOutline,
+            title: 'Form Layouts',
+            path: '/form-layouts'
+        },
 
         {
             sectionTitle: 'Voucher'

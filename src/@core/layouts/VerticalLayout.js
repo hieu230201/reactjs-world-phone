@@ -48,7 +48,6 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const VerticalLayout = props => {
   // ** Props
   const { settings, children, scrollToTop } = props
-
   // ** Vars
   const { contentWidth } = settings
   const navWidth = themeConfig.navigationSize

@@ -79,7 +79,7 @@ const TabAccount = () => {
     };
 
     const onChangeUser = (event) => {
-        debugger
+        
         const {name, value} = event.target;
         setUserProfile((prevState) => ({
             ...prevState,
