@@ -11,8 +11,19 @@ import TableCell, {tableCellClasses} from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import {styled} from "@mui/material/styles";
-import {blue, grey} from "@mui/material/colors";
-import TextField from "@mui/material/TextField";
+import {grey} from "@mui/material/colors";
+import Chip from "@mui/material/Chip";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEllipsisV} from '@fortawesome/free-solid-svg-icons/faEllipsisV';
+import PencilOutline from 'mdi-material-ui/PencilOutline'
+import Delete from 'mdi-material-ui/Delete'
+import SwapHorizontal from 'mdi-material-ui/SwapHorizontal'
+import {Modal} from "@mui/material";
+import DeleteUser from "../employee-manager/DeleteUser";
+import Grid from "@mui/material/Grid";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -34,12 +45,24 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
         border: 0
     }
 }))
-const TableStickyHeader = ({columns, rows, searchText}) => {
+const TableStickyHeader = ({columns, rows, searchText, setTitle}) => {
     // ** States
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [orderBy, setOrderBy] = useState('');
     const [orderDirection, setOrderDirection] = useState('asc');
+
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
+
+    const handleConfirmOpen = (row) => {
+        setSelectedRow(row);
+        setConfirmOpen(true);
+    };
+
+    const handleConfirmClose = () => {
+        setConfirmOpen(false);
+    };
 
     const handleSort = (columnId) => {
         const isAsc = orderBy === columnId && orderDirection === 'asc';
@@ -81,34 +104,136 @@ const TableStickyHeader = ({columns, rows, searchText}) => {
         setPage(0)
     }
 
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDelete = (rowToDelete) => {
+        rows = rows.filter(row => row.id !== rowToDelete.id);
+    };
+
+
     return (
         <Paper sx={{width: '100%', overflow: 'hidden'}}>
+            <Grid>
+                <DeleteUser confirmOpen={confirmOpen} handleConfirmClose={handleConfirmClose} selectedRow={selectedRow} handleDelete={handleConfirmOpen}/>
+            </Grid>
             <TableContainer sx={{maxHeight: 440}}>
                 <Table stickyHeader aria-label='sticky table'>
                     <TableHead>
-                        <TableRow>
-                            {columns.map(column => (
+                        <StyledTableRow>
+                            {columns.filter(column => (column.display === undefined || column.display === false)).map(column => (
                                 <StyledTableCell key={column.id} align={column.align} sx={{minWidth: column.minWidth}}
                                                  onClick={() => handleSort(column.id)}>
                                     {column.label}
                                 </StyledTableCell>
                             ))}
-                        </TableRow>
+                        </StyledTableRow>
                     </TableHead>
                     <TableBody>
                         {sortedRows(filteredRows).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
                             return (
-                                <TableRow hover role='checkbox' tabIndex={-1} key={row.code}>
-                                    {columns.map(column => {
+                                <StyledTableRow hover role='checkbox' tabIndex={-1} key={row.id}>
+                                    {columns.filter(column => (column.display === undefined || column.display === false)).map(column => {
+                                        
                                         const value = row[column.id]
+                                        if (column.id === 'status') {
+                                            if (value === 'active') {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        <Chip label={value} color="primary" variant="outlined"/>
+                                                    </TableCell>
+                                                )
+                                            }
+                                            if (value === 'Inactive') {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        <Chip label={value} color="warning" variant="outlined"/>
+                                                    </TableCell>
+                                                )
+                                            }
 
+                                        }
+                                        if (column.id === 'role') {
+                                            if (value === 'admin') {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        <Chip label={value} color="primary"/>
+                                                    </TableCell>
+                                                )
+                                            }
+                                            if (value === 'user') {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        <Chip label={value} color="secondary"/>
+                                                    </TableCell>
+                                                )
+                                            }
+                                            if (value === 'kho') {
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        <Chip label={value} color="info"/>
+                                                    </TableCell>
+                                                )
+                                            }
+                                        }
+                                        if (column.id === 'action') {
+                                            return <TableCell>
+                                                <IconButton aria-label="more" aria-controls="long-menu"
+                                                            aria-haspopup="true" onClick={handleClick}>
+                                                    <FontAwesomeIcon icon={faEllipsisV}/>
+                                                </IconButton>
+                                                <Menu
+                                                    id="long-menu"
+                                                    anchorEl={anchorEl}
+                                                    keepMounted
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    anchorOrigin={{
+                                                        vertical: 'bottom',
+                                                        horizontal: 'right',
+                                                    }}
+                                                    transformOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right',
+                                                    }}
+                                                >
+                                                    <MenuItem onClick={(e) => {
+                                                        handleClose();
+                                                        setTitle('Edit User');
+                                                    }
+                                                    }>
+                                                        <PencilOutline fontSize="small" style={{marginRight: '10px'}}/>
+                                                        Edit User
+                                                    </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                        <SwapHorizontal fontSize="small" style={{marginRight: '10px'}}/>
+                                                        Change Status
+                                                    </MenuItem>
+                                                    <MenuItem onClick={() => {
+                                                        handleClose();
+                                                        handleConfirmOpen(row);
+                                                    }}>
+                                                        <Delete fontSize="small" style={{ marginRight: '10px' }}/>
+                                                        Delete
+                                                    </MenuItem>
+                                                </Menu>
+                                            </TableCell>
+                                        }
                                         return (
                                             <TableCell key={column.id} align={column.align}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                                             </TableCell>
                                         )
                                     })}
-                                </TableRow>
+                                </StyledTableRow>
                             )
                         })}
                     </TableBody>

@@ -12,66 +12,58 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Divider from '@mui/material/Divider';
 import TextField from "@mui/material/TextField";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Modal} from "@mui/material";
 import Box from "@mui/material/Box";
-
+import AddOrUpdateUser from '../../views/employee-manager/AddOrUpdateUser'
 
 
 const columns = [
-    {id: 'name', label: 'Name', minWidth: 170},
-    {id: 'code', label: 'ISO\u00a0Code', minWidth: 100},
-    {
-        id: 'population',
-        label: 'Population',
-        minWidth: 170,
-        align: 'right',
-        format: value => value.toLocaleString('en-US')
-    },
-    {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
-        minWidth: 170,
-        align: 'right',
-        format: value => value.toLocaleString('en-US')
-    },
-    {
-        id: 'density',
-        label: 'Density',
-        minWidth: 170,
-        align: 'right',
-        format: value => value.toFixed(2)
-    }
+    {id: 'id', label: 'Id', minWidth: 170, display: true},
+    {id: 'userName', label: 'Username', minWidth: 170},
+    {id: 'fullName', label: 'Full Name', minWidth: 170},
+    {id: 'email', label: 'Email', minWidth: 100},
+    {id: 'status', label: 'Status', minWidth: 100},
+    {id: 'role', label: 'Role', minWidth: 100},
+    {id: 'action', label: 'Action', minWidth: 100},
+    // {
+    //     id: 'size',
+    //     label: 'Size\u00a0(km\u00b2)',
+    //     minWidth: 170,
+    //     align: 'right',
+    //     format: value => value.toLocaleString('en-US')
+    // },
+    // {
+    //     id: 'density',
+    //     label: 'Density',
+    //     minWidth: 170,
+    //     align: 'right',
+    //     format: value => value.toFixed(2)
+    // }
 ]
 
-function createData(name, code, population, size) {
-    const density = population / size
+function createData(id, userName, population, size, fullName, email, role, status) {
 
-    return {name, code, population, size, density}
+    return {id, userName, fullName, email, role, status}
 }
 
 const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767)
+    createData('India', 'IN', 1324171354, 3287263, 'hi', 'hihih', 'admin', 'active'),
+    createData('China', 'CN', 1403500365, 9596961, 'hi', 'hihih', 'user', 'Inactive'),
+    createData('Italy', 'IT', 60483973, 301340, 'hi', 'hihih', 'kho', 'active'),
 ]
 
 const EmployeeManager = () => {
     const [searchText, setSearchText] = useState('');
+    const [title, setTitle] = useState('');
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    useEffect(() => {
+        if (title === 'Add User' || title === 'Edit User') {
+            setOpen(true);
+            setTitle('')
+        }
+    }, [title]);
+
     const handleClose = () => setOpen(false);
     return (
         <Grid container spacing={2} justify="center">
@@ -82,20 +74,15 @@ const EmployeeManager = () => {
                     aria-labelledby="parent-modal-title"
                     aria-describedby="parent-modal-description"
                 >
-                    <Box>
-                        <h2 id="parent-modal-title">Text in a modal</h2>
-                        <p id="parent-modal-description">
-                            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                        </p>
-                    </Box>
+                    <AddOrUpdateUser titleModal={title} handleClose={handleClose}/>
                 </Modal>
             </Grid>
             <Grid item xs={12}>
                 <Card>
-                    <CardHeader title='Search Filter' titleTypographyProps={{variant: 'h6'}}/>
+                    <CardHeader title='Search Filter'/>
                     <CardContent>
                         <Grid container justify="center" spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={6} sm={6}>
                                 <FormControl fullWidth>
                                     <InputLabel>Select Role</InputLabel>
                                     <Select label='Role'>
@@ -105,7 +92,7 @@ const EmployeeManager = () => {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={6} sm={6}>
                                 <FormControl fullWidth>
                                     <InputLabel>Select Status</InputLabel>
                                     <Select label='Status'>
@@ -115,12 +102,11 @@ const EmployeeManager = () => {
                                 </FormControl>
                             </Grid>
                         </Grid>
-
                     </CardContent>
                 </Card>
             </Grid>
             <Grid item xs={12} container justifyContent="flex-end" alignItems="center" spacing={1}>
-            <Grid item>
+                <Grid item>
                     <TextField
                         variant='outlined'
                         value={searchText}
@@ -130,13 +116,13 @@ const EmployeeManager = () => {
                     />
                 </Grid>
                 <Grid item>
-                    <Button variant='contained' onClick={handleOpen}>
-                        Add User <Plus />
+                    <Button variant='contained' onClick={() => setTitle('Add User')}>
+                        Add User <Plus/>
                     </Button>
                 </Grid>
             </Grid>
             <Grid item xs={12}>
-                <TableStickyHeader columns={columns} rows={rows} searchText={searchText}/>
+                <TableStickyHeader columns={columns} rows={rows} searchText={searchText} setTitle={setTitle}/>
             </Grid>
 
         </Grid>
