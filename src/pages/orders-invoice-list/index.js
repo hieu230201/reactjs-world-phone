@@ -12,11 +12,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Divider from '@mui/material/Divider';
 import TextField from "@mui/material/TextField";
-import {useEffect, useState} from "react";
+import {forwardRef, useEffect, useState} from "react";
 import {Modal} from "@mui/material";
 import Box from "@mui/material/Box";
 import AddOrUpdateUser from '../../views/employee-manager/AddOrUpdateUser'
 import Paper from "@mui/material/Paper";
+import DatePicker from "react-datepicker";
+import DatePickerWrapper from "../../@core/styles/libs/react-datepicker";
 
 
 const columns = [
@@ -53,11 +55,18 @@ const rows = [
     createData('China', 'CN', 1403500365, 9596961, 'hi', 'hihih', 'user', 'Inactive'),
     createData('Italy', 'IT', 60483973, 301340, 'hi', 'hihih', 'kho', 'active'),
 ]
+const CustomInput = forwardRef((props, ref) => {
+    return <TextField inputRef={ref} label='Invoice Date' fullWidth {...props} />
+})
 
 const EmployeeManager = () => {
     const [searchText, setSearchText] = useState('');
     const [title, setTitle] = useState('');
     const [open, setOpen] = useState(false);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+
+
     useEffect(() => {
         if (title === 'Add User' || title === 'Edit User') {
             setOpen(true);
@@ -80,14 +89,13 @@ const EmployeeManager = () => {
                     </Modal>
                 </Grid>
                 <Grid item xs={12}>
-                    <Card>
                         <CardHeader title='Search Filter'/>
                         <CardContent>
                             <Grid container justify="center" spacing={2}>
                                 <Grid item xs={6} sm={6}>
                                     <FormControl fullWidth>
-                                        <InputLabel >Select Role</InputLabel>
-                                        <Select label='Select Role'>
+                                        <InputLabel >Invoice Status</InputLabel>
+                                        <Select label='Invoice Status'>
                                             <MenuItem value='Admin'>Admin</MenuItem>
                                             <MenuItem value='User'>User</MenuItem>
                                             <MenuItem value='Kho'>Kho</MenuItem>
@@ -95,17 +103,25 @@ const EmployeeManager = () => {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={6} sm={6}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Select Status</InputLabel>
-                                        <Select label='Select Status'>
-                                            <MenuItem value='Active'>Active</MenuItem>
-                                            <MenuItem value='Inactive'>Inactive</MenuItem>
-                                        </Select>
-                                    </FormControl>
+                                    <DatePickerWrapper>
+                                        <DatePicker
+                                            selectsRange
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            onChange={(update) => {
+                                                setStartDate(update[0]);
+                                                setEndDate(update[1]);
+                                            }}
+                                            monthsShown={2}
+                                            showYearDropdown
+                                            showMonthDropdown
+                                            id='account-settings-date'
+                                            customInput={<CustomInput/>}
+                                        />
+                                    </DatePickerWrapper>
                                 </Grid>
                             </Grid>
                         </CardContent>
-                    </Card>
                 </Grid>
                 <Divider black/>
                 <Grid item xs={12} container justifyContent="flex-end" alignItems="center" spacing={1}>

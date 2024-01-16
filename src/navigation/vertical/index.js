@@ -85,9 +85,20 @@ const navigation = () => {
             path: '/orders'
         },
         {
-            title: 'Orders Invoice',
+            title: 'Invoice',
             icon: CashRemove,
-            path: '/orders-invoice'
+            childers: [
+                {
+                    title: 'List',
+                    icon: CashRemove,
+                    path: '/orders-invoice-list'
+                },
+                {
+                    title: 'Edit',
+                    icon: CashRemove,
+                    path: '/orders-invoice-edit'
+                },
+            ]
         },
         {
             title: 'Typography',
