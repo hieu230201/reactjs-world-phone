@@ -203,24 +203,20 @@ const ModalUser = ({titleModal, handleClose}) => {
                             </Box>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='First Name' placeholder='Leonard'/>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField fullWidth label='Last Name' placeholder='Carter'/>
+                            <TextField fullWidth label='Full Name' placeholder='Leonard'/>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>
-                                <InputLabel id='form-layouts-separator-select-label'>Country</InputLabel>
+                                <InputLabel id='form-layouts-separator-select-label'>Role</InputLabel>
                                 <Select
-                                    label='Country'
+                                    label='Role'
                                     defaultValue=''
                                     id='form-layouts-separator-select'
                                     labelId='form-layouts-separator-select-label'
                                 >
-                                    <MenuItem value='UK'>UK</MenuItem>
-                                    <MenuItem value='USA'>USA</MenuItem>
-                                    <MenuItem value='Australia'>Australia</MenuItem>
-                                    <MenuItem value='Germany'>Germany</MenuItem>
+                                    <MenuItem value='ADMIN'>ADMIN</MenuItem>
+                                    <MenuItem value='SELL'>SELL</MenuItem>
+                                    <MenuItem value='WareHouse'>WareHouse</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

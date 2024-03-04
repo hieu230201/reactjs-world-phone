@@ -58,6 +58,8 @@ const EmployeeManager = () => {
     const [searchText, setSearchText] = useState('');
     const [title, setTitle] = useState('');
     const [open, setOpen] = useState(false);
+    const [user, setUser] = useState({});
+
     useEffect(() => {
         if (title === 'Add User' || title === 'Edit User') {
             setOpen(true);
@@ -89,8 +91,8 @@ const EmployeeManager = () => {
                                         <InputLabel >Select Role</InputLabel>
                                         <Select label='Select Role'>
                                             <MenuItem value='Admin'>Admin</MenuItem>
-                                            <MenuItem value='User'>User</MenuItem>
-                                            <MenuItem value='Kho'>Kho</MenuItem>
+                                            <MenuItem value='SELL'>SELL</MenuItem>
+                                            <MenuItem value='WAREHOUSE'>WAREHOUSE</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
