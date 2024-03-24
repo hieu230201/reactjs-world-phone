@@ -22,6 +22,7 @@ import Button from '@mui/material/Button'
 import Close from 'mdi-material-ui/Close'
 import DatePicker from "react-datepicker";
 import DatePickerWrapper from "../../@core/styles/libs/react-datepicker";
+import axiosInstance from "../../@core/api/axiosConfig";
 
 const ImgStyled = styled('img')(({theme}) => ({
     width: 120,
@@ -55,14 +56,27 @@ const TabAccount = () => {
     // ** State
     const [openAlert, setOpenAlert] = useState(false)
     const [imgSrc, setImgSrc] = useState('/images/avatars/1.png')
-    const [userProfile, setUserProfile] = useState({
-        username: 'hieunt',
-        name: 'Nguyễn Trung Hiếu',
-        email: 'h1ieuop30316@gmail.com',
-        role: 'admin',
-        status: 'active',
-        birthDate: '01-01-2001',
-    });
+    const [userProfile, setUserProfile] = useState({});
+
+    useEffect(() => {
+        axiosInstance.get('/user/' + localStorage.getItem("email"))
+            .then(function (response) {
+                console.log(response);
+                if (response && response.data) {
+                    setUserProfile({
+                        fullName: response.data.fullName,
+                        email: response.data.email,
+                        dateOfBirth : response.data.dateOfBirth,
+                        username: response.data.username, role: 'admin',
+                        status: 'active',
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }, [])
+
     const onChange = file => {
         const reader = new FileReader()
         const {files} = file.target
@@ -79,7 +93,7 @@ const TabAccount = () => {
     };
 
     const onChangeUser = (event) => {
-        
+
         const {name, value} = event.target;
         setUserProfile((prevState) => ({
             ...prevState,
@@ -89,7 +103,7 @@ const TabAccount = () => {
     useEffect(() => {
         console.log('Updated userProfile:', userProfile);
     }, [userProfile])
-
+console.log(userProfile)
 
 
     return (
@@ -123,10 +137,10 @@ const TabAccount = () => {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField onChange={onChangeUser} name={'username'} fullWidth label='Username' placeholder='johnDoe' defaultValue={userProfile.username}/>
+                        <TextField onChange={onChangeUser} name={'username'} fullWidth label='Username' placeholder='johnDoe' value={userProfile.username || null}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField onChange={onChangeUser} name={'name'} fullWidth label='Name' placeholder='John Doe' defaultValue={userProfile.name}/>
+                        <TextField onChange={onChangeUser} name={'fullName'} fullWidth label='Name' placeholder='John Doe' value={userProfile.name || null}/>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -135,47 +149,47 @@ const TabAccount = () => {
                             label='Email'
                             onChange={onChangeUser} name={'email'}
                             placeholder='johnDoe@example.com'
-                            defaultValue={userProfile.email}
+                            value={userProfile.email}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Role</InputLabel>
-                            <Select label='Role' defaultValue={userProfile.role} onChange={onChangeUser} name={'role'}>
-                                <MenuItem value='admin'>Admin</MenuItem>
-                                <MenuItem value='author'>Author</MenuItem>
-                                <MenuItem value='editor'>Editor</MenuItem>
-                                <MenuItem value='maintainer'>Maintainer</MenuItem>
-                                <MenuItem value='subscriber'>Subscriber</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Status</InputLabel>
-                            <Select label='Status' defaultValue={userProfile.status} onChange={onChangeUser} name={'status'}>
-                                <MenuItem value='active'>Active</MenuItem>
-                                <MenuItem value='inactive'>Inactive</MenuItem>
-                                <MenuItem value='pending'>Pending</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <DatePickerWrapper>
-                            <DatePicker
-                                onChange={date => setUserProfile((prevState) => ({
-                                    ...prevState,
-                                    ['birthDate'] : date
-                                }))}
-                                name={'birthDate'}
-                                showYearDropdown
-                                showMonthDropdown
-                                id='account-settings-date'
-                                customInput={<CustomInput/>}
-                                value={userProfile.birthDate}
-                            />
-                        </DatePickerWrapper>
-                    </Grid>
+                    {/*<Grid item xs={12} sm={6}>*/}
+                    {/*    <FormControl fullWidth>*/}
+                    {/*        <InputLabel>Role</InputLabel>*/}
+                    {/*        <Select label='Role' defaultValue={userProfile.role} onChange={onChangeUser} name={'role'}>*/}
+                    {/*            <MenuItem value='admin'>Admin</MenuItem>*/}
+                    {/*            <MenuItem value='author'>Author</MenuItem>*/}
+                    {/*            <MenuItem value='editor'>Editor</MenuItem>*/}
+                    {/*            <MenuItem value='maintainer'>Maintainer</MenuItem>*/}
+                    {/*            <MenuItem value='subscriber'>Subscriber</MenuItem>*/}
+                    {/*        </Select>*/}
+                    {/*    </FormControl>*/}
+                    {/*</Grid>*/}
+                    {/*<Grid item xs={12} sm={6}>*/}
+                    {/*    <FormControl fullWidth>*/}
+                    {/*        <InputLabel>Status</InputLabel>*/}
+                    {/*        <Select label='Status' defaultValue={userProfile.status} onChange={onChangeUser} name={'status'}>*/}
+                    {/*            <MenuItem value='active'>Active</MenuItem>*/}
+                    {/*            <MenuItem value='inactive'>Inactive</MenuItem>*/}
+                    {/*            <MenuItem value='pending'>Pending</MenuItem>*/}
+                    {/*        </Select>*/}
+                    {/*    </FormControl>*/}
+                    {/*</Grid>*/}
+                    {/*<Grid item xs={12} sm={6}>*/}
+                    {/*    <DatePickerWrapper>*/}
+                    {/*        <DatePicker*/}
+                    {/*            onChange={date => setUserProfile((prevState) => ({*/}
+                    {/*                ...prevState,*/}
+                    {/*                ['birthDate'] : date*/}
+                    {/*            }))}*/}
+                    {/*            name={'birthDate'}*/}
+                    {/*            showYearDropdown*/}
+                    {/*            showMonthDropdown*/}
+                    {/*            id='account-settings-date'*/}
+                    {/*            customInput={<CustomInput/>}*/}
+                    {/*            value={userProfile.birthDate}*/}
+                    {/*        />*/}
+                    {/*    </DatePickerWrapper>*/}
+                    {/*</Grid>*/}
 
           {openAlert ? (
             <Grid item xs={12} sx={{ mb: 3 }}>

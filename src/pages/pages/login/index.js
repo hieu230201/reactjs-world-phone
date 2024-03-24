@@ -90,6 +90,7 @@ const LoginPage = () => {
             .then(function (response) {
                 console.log(response.data);
                 localStorage.setItem('token', response.data);
+                localStorage.setItem('email', email);
                 router.push("/")
             })
             .catch(function (error) {
